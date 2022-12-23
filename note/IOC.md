@@ -379,19 +379,90 @@ public class TestSpring5Test {
 
 ### 基于XML注入集合属性
 
-#### 注入数组类型属性
+-   注入数组类型属性
+-   注入List集合类型属性
+-   注入Map集合
+-   注入Set集合
 
+1.  创建类，定义属性：数组，List，Map，Set类型
 
+    ```java
+    public class Student {
+    
+        private String[] courses;
+    
+        private List<String> list;
+    
+        private Map<String, String> map;
+    
+        private Set<String> sets;
+    
+        public void setSets(Set<String> sets) {
+            this.sets = sets;
+        }
+    
+        public Student() {
+        }
+    
+        public void setList(List<String> list) {
+            this.list = list;
+        }
+    
+        public void setMap(Map<String, String> map) {
+            this.map = map;
+        }
+    
+        public void setCourses(String[] courses) {
+            this.courses = courses;
+        }
+    
+        @Override
+        public String toString() {
+            return "Student{" +
+                    "courses=" + Arrays.toString(courses) +
+                    ", list=" + list +
+                    ", map=" + map +
+                    ", sets=" + sets +
+                    '}';
+        }
+    }
+    ```
 
-#### 注入List集合类型属性
+2.  在spring配置文件中进行配置
 
-
-
-#### 注入Map集合
-
-
-
-
+    ```xml
+    <!--集合类型属性注入-->
+    <bean id="student" class="com.shaoyx.spring5.collectiontype.Student">
+       <!--数组类型属性注入-->
+       <property name="courses">
+          <array>
+             <value>数据分析</value>
+             <value>机器学习</value>
+          </array>
+       </property>
+       <!--List类型属性注入-->
+       <property name="list">
+          <list>
+             <value>张三丰</value>
+             <value>刘广延</value>
+          </list>
+       </property>
+       <!--List类型属性注入-->
+       <property name="map">
+          <map>
+             <entry key="JAVA" value="Java"></entry>
+             <entry key="PYTHON" value="Python"></entry>
+          </map>
+       </property>
+       <!--Set类型属性注入-->
+       <property name="sets">
+          <set>
+             <value>MySQL</value>
+             <value>Redis</value>
+          </set>
+       </property>
+    </bean>
+    ```
 
 
 

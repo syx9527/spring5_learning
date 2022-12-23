@@ -4,40 +4,36 @@
        xmlns:p="http://www.springframework.org/schema/p"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 	
-	<!--1.配置User对象创建-->
-	<bean id="user" class="com.shaoyx.spring5.User"/>
-	
-	<!--2.set方法注入属性-->
-	<bean id="book1" class="com.shaoyx.spring5.Book">
-		<!--使用property完成属性注入
-			name:类里面的属性名称
-			value:向属性注入值-->
-		<property name="bookName" value="本草科目"/>
-		<property name="bookAuthor" value="李时珍"/>
-		<!--设置空值null-->
-		<property name="address">
-			<null/>
+	<!--集合类型属性注入-->
+	<bean id="student" class="com.shaoyx.spring5.collectiontype.Student">
+		<!--数组类型属性注入-->
+		<property name="courses">
+			<array>
+				<value>数据分析</value>
+				<value>机器学习</value>
+			</array>
 		</property>
-	</bean>
-	
-	<bean id="orders" class="com.shaoyx.spring5.Orders">
-		<constructor-arg name="ordersName" value="电脑"/>
-		<constructor-arg name="address" value="China"/>
-	</bean>
-	
-	<bean id="book2" class="com.shaoyx.spring5.Book" p:bookName="九阳神功" p:bookAuthor="邵曰信"/>
-	
-	<bean id="book3" class="com.shaoyx.spring5.Book">
-		<property name="bookName" value="本草科目"/>
-		<property name="bookAuthor" value="李时珍"/>
-		<!--属性包含特殊符号
-			1.把 <> 转义 &lt;   &gt;
-			2.把带特殊符号内容写道CDATA
-		-->
-		<property name="address">
-			<value><![CDATA[<<南京>>]]></value>
+		<!--List类型属性注入-->
+		<property name="list">
+			<list>
+				<value>张三丰</value>
+				<value>刘广延</value>
+			</list>
+		</property>
+		<!--List类型属性注入-->
+		<property name="map">
+			<map>
+				<entry key="JAVA" value="Java"></entry>
+				<entry key="PYTHON" value="Python"></entry>
+			</map>
+		</property>
+		<!--Set类型属性注入-->
+		<property name="sets">
+			<set>
+				<value>MySQL</value>
+				<value>Redis</value>
+			</set>
 		</property>
 	</bean>
 
-	
 </beans>
