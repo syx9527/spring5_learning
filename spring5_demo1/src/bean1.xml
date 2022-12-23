@@ -3,8 +3,20 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <!--配置User对象创建-->
-    <bean id="user" class="com.shaoyx.spring5.User"/>
+    <!--1.配置User对象创建-->
+    <bean id="user" class="com.shaoyx.spring5.User"></bean>
 
+    <!--2.set方法注入属性-->
+    <bean id="book1" class="com.shaoyx.spring5.Book">
+        <!--使用property完成属性注入
+            name:类里面的属性名称
+            value:向属性注入值-->
+        <property name="bookName" value="本草科目"></property>
+        <property name="bookAuthor" value="李时珍"></property>
+    </bean>
+    <bean id="orders" class="com.shaoyx.spring5.Orders">
+        <constructor-arg name="ordersName" value="电脑"/>
+        <constructor-arg name="address" value="China"/>
+    </bean>
 
 </beans>
