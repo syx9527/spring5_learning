@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:p="http://www.springframework.org/schema/p"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 	
 	<!--集合类型属性注入-->
@@ -20,11 +19,13 @@
 				<value>刘广延</value>
 			</list>
 		</property>
-		<!--List类型属性注入-->
+		<!--map类型属性注入-->
 		<property name="map">
 			<map>
-				<entry key="JAVA" value="Java"></entry>
-				<entry key="PYTHON" value="Python"></entry>
+				<entry key="JAVA" value="Java">
+				</entry>
+				<entry key="PYTHON" value="Python">
+				</entry>
 			</map>
 		</property>
 		<!--Set类型属性注入-->
@@ -34,6 +35,21 @@
 				<value>Redis</value>
 			</set>
 		</property>
+		<!--注入List集合类型，值是对象-->
+		<property name="courseList">
+			<list>
+				<ref bean="course1"/>
+				<ref bean="course2"/>
+			</list>
+		</property>
 	</bean>
-
+	<!--创建多个course对象-->
+	<bean id="course1" class="com.shaoyx.spring5.collectiontype.Course">
+		<property name="courseName" value="JAVA">
+		</property>
+	</bean>
+	<bean id="course2" class="com.shaoyx.spring5.collectiontype.Course">
+		<property name="courseName" value="Python">
+		</property>
+	</bean>
 </beans>

@@ -32,6 +32,15 @@ public class Student {
      */
     private Set<String> sets;
 
+    /**
+     * 学生所学多门课程
+     */
+    private List<Course> courseList;
+
+    public void setCourseList(List<Course> courseList) {
+        this.courseList = courseList;
+    }
+
     public void setSets(Set<String> sets) {
         this.sets = sets;
     }
@@ -58,6 +67,7 @@ public class Student {
                 ", list=" + list +
                 ", map=" + map +
                 ", sets=" + sets +
+                ", courseList=" + courseList +
                 '}';
     }
 }

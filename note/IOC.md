@@ -464,9 +464,163 @@ public class TestSpring5Test {
     </bean>
     ```
 
+### 在集合里面设置对象类型值
+
+```xml
+<bean id="student" class="com.shaoyx.spring5.collectiontype.Student">
+    <!--注入List集合类型，值是对象-->
+       <property name="courseList">
+          <list>
+             <ref bean="course1"/>
+             <ref bean="course2"/>
+          </list>
+       </property>
+    </bean>
+    <!--创建多个course对象-->
+    <bean id="course1" class="com.shaoyx.spring5.collectiontype.Course">
+       <property name="courseName" value="JAVA">
+       </property>
+</bean>
+<bean id="course2" class="com.shaoyx.spring5.collectiontype.Course">
+   <property name="courseName" value="Python">
+   </property>
+</bean>
+```
+
+```java
+public class Student {
+
+
+    /**
+     * 学生所学多门课程
+     */
+    private List<Course> courseList;
+
+    public void setCourseList(List<Course> courseList) {
+        this.courseList = courseList;
+    }
+
+   
+}
+```
 
 
 
+### 把集合注入部分提取出来
+
+1.  在spring配置文件中引入名称空间util，
+
+    ```xml
+    <beans xmlns="http://www.springframework.org/schema/beans"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:p="http://www.springframework.org/schema/p"
+           xmlns:util="http://www.springframework.org/schema/util"
+    
+           xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                               http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+    
+    </beans>
+    ```
+
+2.  使用util标签完成list集合注入提取
+
+```xml
+<!--提取list集合类型属性注入-->
+<util:list id="bookList">
+   <value>高等代数</value>
+   <value>数学分析</value>
+   <value>机器学习</value>
+</util:list>
+<!--提取list集合类型属性注入使用-->
+<bean id="book" class="com.shaoyx.spring5.collectiontype.Book">
+   <property name="list" ref="bookList"/>
+   
+</bean>
+```
+
+### FactoryBean
+
+>   1.  Spring有两中国类型bean，一种普通bean，另外一种工厂bean（FactoryBean）
+>   2.  普通bean：在配置文件中定义的bean类型就是返回类型
+>   3.  工厂bean：在配置文件中定义的bean类型可以与返回类型不一致
+
+1.  创建类，让这个类作为工厂bean,实现接口FactoryBean
+
+2.  实现接口里面的方法，在实现的方法中定义返回的bean类型
+
+    ```java
+    public class MyBean implements FactoryBean<Course> {
+    
+        /**
+         * 定义返回bean
+         *
+         * @return course
+         */
+        @Override
+        public Course getObject() throws Exception {
+            Course course = new Course();
+            course.setCourseName("abs");
+            return course;
+        }
+    
+        @Override
+        public Class<?> getObjectType() {
+            return null;
+        }
+    
+        @Override
+        public boolean isSingleton() {
+            return FactoryBean.super.isSingleton();
+        }
+    }
+    ```
+
+    ```java
+    @Test
+    public void test3() {
+        ApplicationContext context = new ClassPathXmlApplicationContext("bean3.xml");
+        Course course = context.getBean("myBean", Course.class);
+        System.out.println(course);
+    }
+    ```
+
+    ```xml
+    <bean id="myBean" class="com.shaoyx.spring5.factorybean.MyBean">
+    
+    </bean>
+    ```
+
+
+
+### bean的作用域
+
+>   1.  在spring里面，设置创建bean实例还是多实例
+>   2.  在spring里面，默认情况下，bean是单实例对象
+>   3.  可设置为单实例或多实例
+
+设置单实例或多实例
+
+1.  在spring配置文件bean标签里面有属性scope，用于设置单实例或多实例
+
+2.  scope属性值：
+
+    ①singleton，默认值，表示单实例对象
+    ②prototype，表示多实例对象
+
+    ```xml
+    <bean id="book" class="com.shaoyx.spring5.collectiontype.Book" scope="prototype">
+       <property name="list" ref="bookList"/>
+    </bean>
+    ```
+
+    
+
+### bean的生命周期
+
+>   1.  生命周期：从对象创建到对象销毁的过程
+>   2.  过程：
+>       ①通过构造器创建bean实例（无参数构造）
+>       ②为bean的属性设置为对其他bean的引用（调用set方法）
 
 
 
