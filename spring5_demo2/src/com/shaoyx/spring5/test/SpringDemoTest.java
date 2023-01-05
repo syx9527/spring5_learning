@@ -1,9 +1,10 @@
 package com.shaoyx.spring5.test;
 
+import com.shaoyx.spring5.autowire.Emp;
+import com.shaoyx.spring5.bean.Orders;
 import com.shaoyx.spring5.collectiontype.Book;
 import com.shaoyx.spring5.collectiontype.Course;
 import com.shaoyx.spring5.collectiontype.Student;
-import com.shaoyx.spring5.factorybean.MyBean;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -42,6 +43,24 @@ public class SpringDemoTest {
         ApplicationContext context = new ClassPathXmlApplicationContext("bean3.xml");
         Course course = context.getBean("myBean", Course.class);
         System.out.println(course);
+    }
+
+    @Test
+    public void testBean3() {
+        // ApplicationContext context = new ClassPathXmlApplicationContext("bean4.xml");
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("bean4.xml");
+        Orders orders = context.getBean("orders", Orders.class);
+        System.out.println("第四步 获取到bean实例对象");
+        System.out.println(orders);
+        // 手动调用销毁方法
+        // ((ClassPathXmlApplicationContext) context).close();
+        context.close();
+    }
+    @Test
+    public void test4() {
+        ApplicationContext context = new ClassPathXmlApplicationContext("bean5.xml");
+        Emp emp = context.getBean("emp", Emp.class);
+        System.out.println(emp);
     }
 
 }

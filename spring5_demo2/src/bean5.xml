@@ -7,16 +7,21 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
                            http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 	
+	<!--实现自动装配
+		bean标签属性autowire,配置自动装配
+		autowire属性常用两个值：
+			byName根据属性名称注入,注入值bean的id值和类属性名称一致
+			byType根据类型注入
+	-->
+	<bean id="emp" class="com.shaoyx.spring5.autowire.Emp" autowire="byName">
+		<!--<property name="dept" ref="dept"></property>-->
 	
-	<bean id="orders" class="com.shaoyx.spring5.bean.Orders" init-method="initMethod" destroy-method="destroyMethod">
-		<property name="ordersName" value="手机">
-		
-		</property>
 	</bean>
 	
-	<!--配置后置处理器-->
-	<bean id="myBeanPost" class="com.shaoyx.spring5.bean.MyBeanPost">
+	<bean id="dept" class="com.shaoyx.spring5.autowire.Dept"></bean>
+	<bean id="dept1" class="com.shaoyx.spring5.autowire.Dept"></bean>
 	
-	</bean>
+	
+
 
 </beans>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+						   http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+	
+	<!--开启组件扫描
+		1.如果扫描多个包，多个包使用都好隔开
+		2.扫描上层目录即可开启该目录下所有的包
+	-->
+	<context:component-scan base-package="com.shaoyx.spring5">
+	</context:component-scan>
+	
+	<!--&lt;!&ndash;实例1-->
+	<!--	use-default-filters="false" 表示不使用默认filter，使用自定义filter-->
+	<!--&ndash;&gt;-->
+	<!--<context:component-scan base-package="com.shaoyx.spring5" use-default-filters="false">-->
+	<!--	<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>-->
+	<!--</context:component-scan>-->
+	
+	<!--&lt;!&ndash;示例2-->
+	<!--	下面扫描包所有内容-->
+	<!--	context:exclude-filter 设置那些内容不扫描-->
+	<!--&ndash;&gt;-->
+	<!--<context:component-scan base-package="com.shaoyx.spring5">-->
+	<!--	<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>-->
+	<!--</context:component-scan>-->
+	
+	
+
+</beans>

@@ -1,8 +1,8 @@
 # IOC
 
-## IOC操作Bean管理
+# IOC操作Bean管理
 
-### 基于xml方式创建对象
+## 基于xml方式创建对象
 
 ```xml
 <bean id="user" class="com.shaoyx.spring5.User"></bean>
@@ -16,7 +16,7 @@
 
 ### 基于xml方式注入属性
 
-#### 使用set方法进行注入
+**使用set方法进行注入**
 
 *Book.java*
 
@@ -64,7 +64,7 @@ public class TestSpring5Test {
 }
 ```
 
-#### 有参构造注入
+### 有参构造注入
 
 *Orders.java*
 
@@ -109,7 +109,7 @@ public class TestSpring5Test {
     }
 }
 ```
-#### 	P名称空间注入（了解）
+### 	P名称空间注入（了解）
 
 使用p名称空间注入，可以简化基于xml配置方式
 
@@ -135,7 +135,7 @@ public class TestSpring5Test {
 
 ### 基于XML注入其他类型属性
 
-#### 字面量：
+字面量：
 
 1.  null值
 
@@ -166,7 +166,7 @@ public class TestSpring5Test {
     </bean>
     ```
 
-#### 注入属性-外部bean
+### **注入属性-外部bean**
 
 1.  创建两个类:service类和dao类
 
@@ -241,7 +241,7 @@ public class TestSpring5Test {
     }
     ```
 
-#### 注入属性-内部bean和级联赋值
+### 注入属性-内部bean和级联赋值
 
 1.  一对多关系：部门和员工
 
@@ -338,7 +338,7 @@ public class TestSpring5Test {
     </bean>
     ```
 
-#### 注入属性-级联赋值
+注入属性-级联赋值
 
 1.  第一种方式
 
@@ -624,10 +624,337 @@ public class Student {
 >       ③调用bean的初始化的方法（需要进行配置初始化的方法）
 >       ④bean可以使用了（对象获取到了）
 >       ⑤当容器关闭的时候，调用bean的销毁的方法（需要配置销毁的方法）
+>   3.  后置处理器
+>       ①通过构造器创建bean实例（无参数构造）
+>       ②为bean的属性设置为对其他bean的引用（调用set方法）
+>       ③把bean实例传递bean后置处理的方法
+>       ④调用bean的初始化的方法（需要进行配置初始化的方法）
+>       ⑤把bean实例传递bean后置处理的方法
+>       ⑥bean可以使用了（对象获取到了）
+>       ⑦当容器关闭的时候，调用bean的销毁的方法（需要配置销毁的方法）
+
+1.  一般过程
+
+    ```java
+    public class Orders {
+        private String ordersName;
+    
+        public Orders() {
+            System.out.println("第一步 执行无参构造创建bean实例");
+        }
+    
+        public void setOrdersName(String ordersName) {
+            this.ordersName = ordersName;
+            System.out.println("第二部 调用set方法设置值");
+        }
+    
+        /**
+         * 创建执行的初始化的方法,方法名可自定义
+         */
+        public void initMethod() {
+            System.out.println("第三步 执行初始化方法");
+        }
+    
+        /**
+         * 创建执行的销毁的方法,方法名可自定义
+         */
+        public void destroyMethod() {
+            System.out.println("第五步 执行销毁方法");
+        }
+    }
+    ```
+
+    ```xml
+    <bean id="orders" class="com.shaoyx.spring5.bean.Orders" init-method="initMethod" destroy-method="destroyMethod">
+       <property name="ordersName" value="手机">
+       
+       </property>
+    </bean>
+    ```
+
+    ```java
+    @Test
+    public void testBean3() {
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("bean4.xml");
+        Orders orders = context.getBean("orders", Orders.class);
+        System.out.println("第四步 获取到bean实例对象");
+        System.out.println(orders);
+        // 手动调用销毁方法
+        context.close();
+    }
+    ```
+
+2.  后置处理器
+
+    >   1.  创建类，实现接口BeanPostProcessor，创建后置处理器
+
+    ```java
+    public class MyBeanPost implements BeanPostProcessor {
+        @Override
+        public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
+            System.out.println("在初始化之前执行的方法");
+            return bean;
+        }
+    
+        @Override
+        public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+            System.out.println("在初始化之后执行的方法");
+            return bean;
+        }
+    }
+    ```
+
+    ```xml
+    <!--配置后置处理器-->
+    <bean id="myBeanPost" class="com.shaoyx.spring5.bean.MyBeanPost">
+    
+    </bean>
+    ```
+
+### XML自动装配
+
+>   自动装配：根据指定装配规则（属性名称或者属性类型），spring自动匹配的属性值进行注入
+
+```xml
+<!--实现自动装配
+   bean标签属性autowire,配置自动装配
+   autowire属性常用两个值：
+      byName根据属性名称注入,注入值bean的id值和类属性名称一致
+      byType根据类型注入
+-->
+<bean id="emp" class="com.shaoyx.spring5.autowire.Emp" autowire="byName">
+   <!--<property name="dept" ref="dept"></property>-->
+
+</bean>
+```
+
+### 外部属性文件
+
+>   1.  直接配置数据库信息
+>
+>       ①配置德鲁伊连接池
+>       ②引入德鲁伊连接池jar包
+>
+>       ```xml
+>       <bean id="druidDataSource" class="com.alibaba.druid.pool.DruidDataSource">
+>          <property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
+>          <property name="url" value="jdbc:mysql://localhost:3306/userDB"></property>
+>          <property name="username" value="root"></property>
+>          <property name="password" value="$123456"></property>
+>       </bean>
+>       ```
+>
+>   2.  引入外部属性文件配置数据库连接池
+>
+>       ①创建外部属性文件，properties格式文件，填写数据库信息
+>
+>       ```properties
+>       prop.driverClass=com.mysql.jdbc.Driver
+>       prop.url=jdbc:mysql://localhost:3306/userDB
+>       prop.username=root
+>       prop.password=123456
+>       ```
+>
+>       ②把外部properties属性文件引入到spring配置文件中
+>       引入context名称空间
+>
+>       ```xml
+>       <beans xmlns="http://www.springframework.org/schema/beans"
+>              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+>              xmlns:p="http://www.springframework.org/schema/p"
+>              xmlns:util="http://www.springframework.org/schema/util"
+>              xmlns:context="http://www.springframework.org/schema/context"
+>       
+>              xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+>                                  http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+>                                  http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+>       </beans>
+>       ```
+>
+>       在spring 配置文件使用标签引入外部属性文件
+>
+>       
 
 
 
-### 基于注解方式实现
+
+
+## 基于注解方式实现
+
+>   1.  注解是代码特殊标记，格式：@注解名称(属性名称=属性值，属性名称=属性值…)
+>   2.  使用注解，注解可以使用在类、方法、属性上面
+>   3.  目的：简化xml配置
+
+
+
+>   Spring针对Bean管理中创建对象提供注解
+>
+>   1.  @Component
+>   2.  @Service
+>   3.  @Controller
+>   4.  @Repository
+
+### 基于注解方式实现对象创建
+
+>   1.  引入jar依赖
+>       spring-aop-5.2.1.RELEASE.jar
+>
+>   2.  开启组件扫描
+>
+>       ```xml
+>       <!--开启组件扫描
+>          1.如果扫描多个包，多个包使用都好隔开
+>          2.扫描上层目录即可开启该目录下所有的包
+>       -->
+>       <context:component-scan base-package="com.shaoyx.spring5">
+>       </context:component-scan>
+>       ```
+>
+>   3.  创建类，在类上面创建对象注解
+>
+>       ```java
+>       // 在注解里面value属性值可以省略不写
+>       // 默认值是类名称，首字母小写
+>       // UserService -- userService
+>       @Component(value = "userService") //<bean id="userService" />
+>       public class UserService {
+>           public void add() {
+>               System.out.println("service add ...");
+>           }
+>       
+>       }
+>       ```
+>
+>   4.  开启组件扫描细节配置
+>
+>       ```xml
+>       <!--实例1
+>          use-default-filters="false" 表示不使用默认filter，使用自定义filter
+>       -->
+>       <context:component-scan base-package="com.shaoyx.spring5" use-default-filters="false">
+>          <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+>       </context:component-scan>
+>       
+>       <!--示例2
+>          下面扫描包所有内容
+>          context:exclude-filter 设置那些内容不扫描
+>       -->
+>       <context:component-scan base-package="com.shaoyx.spring5">
+>          <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+>       </context:component-scan>
+>       ```
+>
+>   5.  基于注解方式实现属性注入
+>
+>       >   1.  @AutoWired：根据属性类型自动装配
+>       >   2.  @Qualifier：根绝属性名称进行注入,需要与@AutoWired一起使用
+>       >   3.  @Resource：可以根据类型注入，也可以根据名称注入
+>       >   4.  @Value：注入普通类型属性
+>
+>       (1)@AutoWired
+>
+>       ①把service和dao对象创建，在service和dao类中添加创建对象注解
+>
+>       ②在service注入dao对象，在service类添加dao类型属性，在属性上面使用注解j
+>
+>       ```java
+>       public interface  UserDao {
+>           public void add() ;
+>       }
+>       
+>       @Repository
+>       public class UserDaoImpl implements UserDao {
+>           @Override
+>           public void add() {
+>               System.out.println("dao add...");
+>           }
+>       }
+>       
+>       public class UserService {
+>       
+>           /**
+>            * 定义dao类型属性
+>            * 不需要添加set方法
+>            * 添加注入属性的注解即可
+>            */
+>           @Autowired // 根据类型注入
+>           private UserDao userDao;
+>       
+>           public void add() {
+>               System.out.println("service add ...");
+>               userDao.add();
+>           }
+>       
+>       
+>       ```
+>
+>       (2)@Qualifier
+>
+>       ```java
+>       public class UserService {
+>       
+>           /**
+>            * 定义dao类型属性
+>            * 不需要添加set方法
+>            * 添加注入属性的注解即可
+>            */
+>           @Autowired // 根据类型注入
+>           @Qualifier(value = "userDaoImpl1")  // 根据名称注入
+>           private UserDao userDao;
+>       
+>           public void add() {
+>               System.out.println("service add ...");
+>               userDao.add();
+>           }
+>       
+>       }
+>       ```
+>
+>       (3)@Resource
+>
+>       ```java
+>       @Resource // 根据类型注入
+>       private UserDao userDao1;
+>       
+>       @Resource(name = "userDaoImpl1") // 根据名称注入
+>       private UserDao userDao2;
+>       ```
+>
+>       (4)@Value
+>
+>       ```java
+>       @Value("abs")
+>       private String name;
+>       ```
+
+### 完全注解开发
+
+>   1.  创建配置类，替代xml配置文件
+>
+>       ```java
+>       import org.springframework.context.annotation.ComponentScan;
+>       import org.springframework.context.annotation.Configuration;
+>       
+>       @Configuration // 作为配置类，替代xml配置文件
+>       @ComponentScan(basePackages = {"com.shaoyx.spring5"})
+>       public class SpringConfig {
+>           
+>       }
+>       ```
+>
+>   2.  编写测试类
+>
+>       ```java
+>       @Test
+>       public void testService2() {
+>           // 加载配置类
+>           ApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
+>       
+>           UserService userService = context.getBean("userService", UserService.class);
+>           System.out.println(userService);
+>           userService.add();
+>       }
+>       ```
 
 
 
