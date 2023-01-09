@@ -1,5 +1,7 @@
 # IOC
 
+
+
 # IOC操作Bean管理
 
 ## 基于xml方式创建对象
@@ -764,7 +766,7 @@ public class Student {
 >              xmlns:p="http://www.springframework.org/schema/p"
 >              xmlns:util="http://www.springframework.org/schema/util"
 >              xmlns:context="http://www.springframework.org/schema/context"
->           
+>               
 >              xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 >                                  http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
 >                                  http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
@@ -861,7 +863,7 @@ public class Student {
 >       public interface  UserDao {
 >           public void add() ;
 >       }
->           
+>               
 >       @Repository
 >       public class UserDaoImpl implements UserDao {
 >           @Override
@@ -869,9 +871,9 @@ public class Student {
 >               System.out.println("dao add...");
 >           }
 >       }
->           
+>               
 >       public class UserService {
->           
+>               
 >           /**
 >            * 定义dao类型属性
 >            * 不需要添加set方法
@@ -879,7 +881,7 @@ public class Student {
 >            */
 >           @Autowired // 根据类型注入
 >           private UserDao userDao;
->           
+>               
 >           public void add() {
 >               System.out.println("service add ...");
 >               userDao.add();
@@ -887,12 +889,12 @@ public class Student {
 >       
 >       
 >       ```
->    
+>        
 >       (2)@Qualifier
->    
+>        
 >       ```java
 >       public class UserService {
->           
+>               
 >           /**
 >            * 定义dao类型属性
 >            * 不需要添加set方法
@@ -901,27 +903,27 @@ public class Student {
 >           @Autowired // 根据类型注入
 >           @Qualifier(value = "userDaoImpl1")  // 根据名称注入
 >           private UserDao userDao;
->           
+>               
 >           public void add() {
 >               System.out.println("service add ...");
 >               userDao.add();
 >           }
->           
+>               
 >       }
 >       ```
->    
+>        
 >       (3)@Resource
->    
+>        
 >       ```java
 >       @Resource // 根据类型注入
 >       private UserDao userDao1;
->           
+>               
 >       @Resource(name = "userDaoImpl1") // 根据名称注入
 >       private UserDao userDao2;
 >       ```
->    
+>        
 >       (4)@Value
->    
+>        
 >       ```java
 >       @Value("abs")
 >       private String name;
@@ -949,7 +951,7 @@ public class Student {
 >       public void testService2() {
 >           // 加载配置类
 >           ApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
->           
+>               
 >           UserService userService = context.getBean("userService", UserService.class);
 >           System.out.println(userService);
 >           userService.add();
