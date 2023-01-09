@@ -4,7 +4,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 	
 	<!--1.service和dao对象创建-->
-	<bean id="userService" class="com.shaoyx.spring5.service.UserService">
+	<bean id="userService" class="com.shaoyx.UserService">
 		<!--注入userDao对象
 			name：类里面属性名称
 			ref：创建userDao对象bean标签的id值
@@ -13,7 +13,7 @@
 		
 		</property>
 	</bean>
-	<bean id="UserDaoImpl" class="com.shaoyx.spring5.dao.UserDaoImpl">
+	<bean id="UserDaoImpl" class="com.shaoyx.UserDaoImpl">
 	
 	</bean>
 
