@@ -380,5 +380,46 @@ static Object newProxyInstance(ClassLoader loader, 类<?>[] interfaces, Invocati
 
 # AspectJ配置文件
 
->   创建两个类
+>   1.  创建两个类，增强类和被增强类，创建方法
+>
+>       ```java
+>       public class BookProxy {
+>           public void before() {
+>               System.out.println(" before ...");
+>           }
+>       }
+>       
+>       public class Book {
+>           public void buy() {
+>               System.out.println("buy book ...");
+>           }
+>       }
+>       ```
+>
+>       
+>
+>   2.  在spring配置文件中创建两个类对象
+>
+>       ```java
+>       <!--创建对象-->
+>       <bean id="book" class="com.shaoyx.spring5.aopxml.Book"/>
+>       <bean id="bookProxy" class="com.shaoyx.spring5.aopxml.BookProxy"/>
+>       ```
+>
+>       
+>
+>   3.  在spring配置文件中配置切入点
+>
+>       ```xml
+>       <!--配置aop增强-->
+>       <aop:config>
+>          <!--切入点-->
+>          <aop:pointcut id="p" expression="execution(* com.shaoyx.spring5.aopxml.Book.buy(..))"/>
+>          <!--配置切面-->
+>          <aop:aspect ref="bookProxy">
+>             <!--增强作用具体的方法上-->
+>             <aop:before method="before" pointcut-ref="p"/>
+>          </aop:aspect>
+>       </aop:config>
+>       ```
 

@@ -5,6 +5,7 @@
       <configuration>
         <fileset id="fileset" name="Bean1" removed="false">
           <file>file://$MODULE_DIR$/../spring5_demo4/src/bean1.xml</file>
+          <file>file://$MODULE_DIR$/../spring5_demo4/src/bean2.xml</file>
         </fileset>
       </configuration>
     </facet>
