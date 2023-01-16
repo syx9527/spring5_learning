@@ -1,22 +1,26 @@
 package com.shaoyx.spring5.test;
 
+import com.shaoyx.spring5.config.TxConfig;
 import com.shaoyx.spring5.service.UserService;
 
 
 import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.context.support.GenericApplicationContext;
+import org.springframework.lang.Nullable;
 
 /**
  * @author SYX
  */
 
 public class UserTest {
+    @Nullable
+    private String username;
 
     @Test
     public void testAccount() {
-        // PlatformTransactionManager
         ApplicationContext context = new ClassPathXmlApplicationContext("bean1.xml");
         UserService userService = context.getBean("userService", UserService.class);
         userService.accountMoney();
@@ -24,11 +28,35 @@ public class UserTest {
 
     @Test
     public void testAccount1() {
-        // PlatformTransactionManager
         ApplicationContext context = new ClassPathXmlApplicationContext("bean2.xml");
         UserService userService = context.getBean("userService", UserService.class);
         userService.accountMoney();
     }
 
+    @Test
+    public void testAccount2() {
+        // 1.创建GenericApplicationContext对象
+        GenericApplicationContext context = new GenericApplicationContext();
+        // 2.调用context的方法进行注册
+        context.refresh();
+        context.registerBean("user1",User.class, User::new);
+
+        // 3.获取在spring注册的对象
+        // User user = (User) context.getBean("com.shaoyx.spring5.test.User");
+        User user = (User) context.getBean("user1");
+        System.out.println(user);
+
+
+    }
+
+    /**
+     * 函数式风格创建对象，交给spring进行管理
+     */
+    @Test
+    public void testAccount3() {
+        ApplicationContext context = new AnnotationConfigApplicationContext(TxConfig.class);
+        UserService userService = context.getBean("userService", UserService.class);
+        userService.accountMoney();
+    }
 
 }
