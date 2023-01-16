@@ -48,12 +48,12 @@
 		</property>
 	</bean>
 	<!--2 配置通知-->
-	<tx:advice id="tx_advice">
+	<tx:advice id="txadvice">
 		<!--配置事务参数-->
 		<tx:attributes>
 			<!--指定哪种规则的方法上面添加事务-->
 			<tx:method name="accountMoney" propagation="REQUIRED"/>
-			<tx:method name="account*"/>
+			<!--<tx:method name="account*"/>-->
 		</tx:attributes>
 	</tx:advice>
 	<!--3 配置切入点和切面-->
@@ -61,7 +61,7 @@
 		<!--配置切入点-->
 		<aop:pointcut id="pt" expression="execution(* com.shaoyx.spring5.service.UserService.*(..))"/>
 		<!--配置切面-->
-		<aop:advisor advice-ref="tx_advice" pointcut-ref="pt"/>
+		<aop:advisor advice-ref="txadvice" pointcut-ref="pt"/>
 	</aop:config>
 
 </beans>
